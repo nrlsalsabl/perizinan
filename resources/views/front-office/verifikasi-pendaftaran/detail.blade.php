@@ -1,0 +1,702 @@
+@extends('layouts.app')
+
+@section('head')
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <title>@yield('title', 'Dashboard')</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+                line-height: 1.6;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .header {
+                background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+                color: white;
+                padding: 2rem;
+                text-align: center;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+                background: white;
+                padding: 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .form-group label {
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-control {
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                padding: 0.75rem;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus {
+                border-color: #1abc9c;
+                box-shadow: 0 0 0 0.2rem rgba(26, 188, 156, 0.25);
+            }
+
+            .form-control[readonly] {
+                background-color: #f8f9fa;
+            }
+
+            iframe {
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                margin: 1rem 0;
+            }
+
+            .btn-primary {
+                background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+                border: none;
+                padding: 0.75rem 1.5rem;
+                border-radius: 6px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .verification-status {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .status-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
+
+            .status-item label {
+                font-weight: 600;
+                margin-right: 1rem;
+                min-width: 120px;
+            }
+
+            .status-item span {
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                background-color: #f8f9fa;
+                color: #2c3e50;
+            }
+
+            select.form-control {
+                cursor: pointer;
+            }
+
+            .preview-btn {
+                margin-top: 0.5rem;
+                display: inline-block;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    margin: 1rem auto;
+                }
+
+                .header {
+                    padding: 1.5rem;
+                }
+
+                .form-group {
+                    padding: 1rem;
+                }
+            }
+        </style>
+    </head>
+@endsection
+
+@section('content')
+    <div class="container">
+        <form action="{{ url('verifikasi-pendaftaran/' . $pendaftaran->id) }}" method="POST" class="p-4">
+            @csrf
+            
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Data Permohonan Izin</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="resi">Resi</label>
+                                <input type="text" name="resi" class="form-control" id="resi" value="{{ $pendaftaran->resi }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="jenis_izin">Jenis Izin</label>
+                                <input type="text" name="jenis_izin" class="form-control" id="jenis_izin" value="{{ $pendaftaran->jenis_izin }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jenis_permohonan">Jenis Layanan</label>
+                        <input type="text" name="jenis_permohonan" class="form-control" id="jenis_permohonan" value="{{ $pendaftaran->jenis_permohonan }}" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Data Pemohon</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nik">NIK</label>
+                                <input type="text" name="nik" class="form-control" id="nik" value="{{ $pemohon->nik }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Nama</label>
+                                <input type="text" name="name" class="form-control" id="name" value="{{ $pemohon->name }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <input type="text" name="alamat" class="form-control" id="alamat" value="{{ $pemohon->alamat }}" readonly>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="provinsi">Provinsi</label>
+                                <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $pemohon->provinsi }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kabupaten_kota">Kabupaten/Kota</label>
+                                <input type="text" name="kabupaten_kota" class="form-control" id="kabupaten_kota" value="{{ $pemohon->kabupaten_kota }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kecamatan">Kecamatan</label>
+                                <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $pemohon->kecamatan }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">No. Telp</label>
+                                <input type="text" name="phone" class="form-control" id="phone" value="{{ $pemohon->phone }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" class="form-control" id="email" value="{{ $pemohon->email }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Data Perusahaan</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nib">NIB</label>
+                                <input type="text" name="nib" class="form-control" id="nib" value="{{ $perusahaan->nib }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="npwp">NPWP</label>
+                                <input type="text" name="npwp" class="form-control" id="npwp" value="{{ $perusahaan->npwp }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nama_perusahaan">Nama Perusahaan</label>
+                        <input type="text" name="nama_perusahaan" class="form-control" id="nama_perusahaan" value="{{ $perusahaan->nama_perusahaan }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <input type="text" name="alamat" class="form-control" id="alamat" value="{{ $perusahaan->alamat }}" readonly>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="provinsi">Provinsi</label>
+                                <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $perusahaan->provinsi }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kabupaten">Kabupaten</label>
+                                <input type="text" name="kabupaten" class="form-control" id="kabupaten" value="{{ $perusahaan->kabupaten }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kecamatan">Kecamatan</label>
+                                <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $perusahaan->kecamatan }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">No. Telp</label>
+                                <input type="text" name="phone" class="form-control" id="phone" value="{{ $perusahaan->phone }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="bentuk_perusahaan">Bentuk Perusahaan</label>
+                                <input type="text" name="bentuk_perusahaan" class="form-control" id="bentuk_perusahaan" value="{{ $perusahaan->bentuk_perusahaan }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Lokasi Izin</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="provinsi">Provinsi</label>
+                                <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $lokasi->provinsi ?? 'N/A' }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kabupaten">Kabupaten</label>
+                                <input type="text" name="kabupaten" class="form-control" id="kabupaten" value="{{ $lokasi->kabupaten }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="kecamatan">Kecamatan</label>
+                                <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $lokasi->kecamatan }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="jalan">Jalan</label>
+                                <input type="text" name="jalan" class="form-control" id="jalan" value="{{ $lokasi->jalan }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nomor">Nomor</label>
+                                <input type="text" name="nomor" class="form-control" id="nomor" value="{{ $lokasi->nomor }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="rt">RT</label>
+                                <input type="text" name="rt" class="form-control" id="rt" value="{{ $lokasi->rt }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="rw">RW</label>
+                                <input type="text" name="rw" class="form-control" id="rw" value="{{ $lokasi->rw }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Lampiran Persyaratan</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Surat Permohonan ditandatangani direktur dan Bermaterai</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Surat Permohonan ditandatangani direktur dan Bermaterai">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->surat_permohonan) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->surat_permohonan) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan KTP Direktur</label>
+                                <input type="hidden" name="nama_file[]" value="Scan KTP Direktur">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->ktp_dir) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->ktp_dir) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan NIB OSS</label>
+                                <input type="hidden" name="nama_file[]" value="Scan NIB OSS">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->nib_oss) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->nib_oss) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Izin Usaha</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Izin Usaha">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->izin_usaha) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->izin_usaha) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Akta Perusahaan</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Akta Perusahaan">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->akta_per) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->akta_per) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Profil Perusahaan</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Profil Perusahaan">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->profil_per) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->profil_per) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan NPWP Kaltim</label>
+                                <input type="hidden" name="nama_file[]" value="Scan NPWP Kaltim">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->npwp_kaltim) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->npwp_kaltim) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Surat Keterangan Domisili</label>
+                                <input type="hidden" name="nama_file[]" value="Surat Keterangan Domisili">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->surat_domisili) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->surat_domisili) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Sertifikat Badan Usaha</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Sertifikat Badan Usaha">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->sertif_badan) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->sertif_badan) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Rencana Pengembangan Kantor Wilayah</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Rencana Pengembangan Kantor Wilayah">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->rencana_peng) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->rencana_peng) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Surat Penetapan Penanggung Jawab Teknik</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Surat Penetapan Penanggung Jawab Teknik">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->surat_pene) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->surat_pene) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Sertifikat Kompetensi Tenaga Teknik</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Sertifikat Kompetensi Tenaga Teknik">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->sertif_kompeten) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->sertif_kompeten) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertifikat ISO</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertifikat ISO">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->sertif_iso) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->sertif_iso) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan SOP</label>
+                                <input type="hidden" name="nama_file[]" value="Scan SOP">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->sop) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->sop) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Daftar Peralatan yang dimiliki/disewa</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Daftar Peralatan yang dimiliki/disewa">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->peralatan_sewa) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->peralatan_sewa) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label>Scan Surat Kuasa Bermaterai Apabila Pengurusan Izin diwakilkan</label>
+                                <input type="hidden" name="nama_file[]" value="Scan Surat Kuasa Bermaterai Apabila Pengurusan Izin diwakilkan">
+                                <select name="validasi[]" class="form-control mb-2">
+                                    <option value="valid" selected>Valid</option>
+                                    <option value="tidak valid">Tidak Valid</option>
+                                </select>
+                                <iframe src="{{ asset('storage/' . $lampiran->surat_kuasa) }}" width="100%" height="150px" class="mb-2"></iframe>
+                                <a href="{{ asset('storage/' . $lampiran->surat_kuasa) }}" class="btn btn-primary preview-btn" target="_blank">Preview</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="header">
+                    <h1>Verifikasi Berkas</h1>
+                </div>
+
+                <div class="p-4">
+                    <div class="form-group">
+                        <label for="catatan_umum">Catatan Umum</label>
+                        <input class="form-control" type="text" name="catatan_umum[]" id="catatan_umum">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proses_terakhir" style="font-size: 1.1rem;">Hasil Verifikasi</label>
+                        <select name="proses_terakhir" id="proses_terakhir" class="form-control" style="padding: 12px; font-size: 1rem; height: auto;">
+                            <option value="Proses Paralel" selected>Berkas Lengkap (dilanjutkan ke Kasi dan Back Office)</option>
+                            <option value="Ditolak">Berkas Tidak Lengkap (ditolak)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="alasan_penolakan_group" style="display: none;">
+                        <label for="alasan_penolakan" style="font-size: 1.1rem;">Alasan Penolakan</label>
+                        <textarea name="alasan_penolakan" id="alasan_penolakan" class="form-control" style="padding: 12px; font-size: 1rem; min-height: 100px;" placeholder="Masukkan alasan penolakan izin..."></textarea>
+                    </div>
+
+                    <div class="verification-status">
+                        <h4 class="mb-3">Status Verifikasi Paralel</h4>
+                        <div class="status-item">
+                            <label>Kasi:</label>
+                            <span id="kasi-status" class="badge badge-warning">Menunggu Verifikasi</span>
+                        </div>
+                        <div class="status-item">
+                            <label>Back Office:</label>
+                            <span id="backoffice-status" class="badge badge-warning">Menunggu Verifikasi</span>
+                        </div>
+                        <div class="status-item mt-3">
+                            <label>Status Akhir:</label>
+                            <span id="final-status" class="badge badge-info">Menunggu Kedua Verifikasi</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Function to update verification status
+        function updateVerificationStatus() {
+            const pengajuanId = '{{ $pendaftaran->pengajuan_id }}';
+            
+            fetch(`/api/verification-status/${pengajuanId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update status badges
+                    const kasiStatus = document.getElementById('kasi-status');
+                    const backofficeStatus = document.getElementById('backoffice-status');
+                    const finalStatus = document.getElementById('final-status');
+
+                    // Update Kasi status
+                    kasiStatus.textContent = data.kasi;
+                    kasiStatus.className = 'badge ' + (data.kasi === 'Terverifikasi' ? 'badge-success' : 'badge-warning');
+
+                    // Update Back Office status
+                    backofficeStatus.textContent = data.backoffice;
+                    backofficeStatus.className = 'badge ' + (data.backoffice === 'Terverifikasi' ? 'badge-success' : 'badge-warning');
+
+                    // Update final status
+                    if (data.kasi === 'Terverifikasi' && data.backoffice === 'Terverifikasi') {
+                        finalStatus.textContent = 'Siap Cetak Izin';
+                        finalStatus.className = 'badge badge-success';
+                    } else if (data.kasi === 'Ditolak' || data.backoffice === 'Ditolak') {
+                        finalStatus.textContent = 'Permohonan Ditolak';
+                        finalStatus.className = 'badge badge-danger';
+                    } else {
+                        finalStatus.textContent = 'Menunggu Kedua Verifikasi';
+                        finalStatus.className = 'badge badge-info';
+                    }
+                });
+        }
+
+        // Update status every 15 seconds
+        setInterval(updateVerificationStatus, 15000);
+        // Initial update
+        updateVerificationStatus();
+
+        // Handle rejection reason field visibility
+        document.getElementById('proses_terakhir').addEventListener('change', function() {
+            const alasanGroup = document.getElementById('alasan_penolakan_group');
+            if (this.value === 'Ditolak') {
+                alasanGroup.style.display = 'block';
+                document.getElementById('alasan_penolakan').setAttribute('required', 'required');
+            } else {
+                alasanGroup.style.display = 'none';
+                document.getElementById('alasan_penolakan').removeAttribute('required');
+            }
+        });
+
+        // Form validation before submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const prosesTerakhir = document.getElementById('proses_terakhir').value;
+            const alasanPenolakan = document.getElementById('alasan_penolakan').value;
+
+            if (prosesTerakhir === 'Ditolak' && !alasanPenolakan.trim()) {
+                e.preventDefault();
+                alert('Mohon isi alasan penolakan izin');
+            }
+        });
+    </script>
+@endsection

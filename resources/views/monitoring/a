@@ -1,0 +1,48 @@
+{{-- <!-- resources/views/exports/rekapitulasi_izin.blade.php -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rekapitulasi Izin</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rekapitulasi Izin</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Resi</th>
+                <th>Pemohon</th>
+                <th>Perusahaan</th>
+                <th>Jenis Proses Perizinan</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data as $index => $izin)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $izin->resi }}</td>
+                    <td>{{ $izin->pemohon }}</td>
+                    <td>{{ $izin->perusahaan }}</td>
+                    <td>{{ $izin->jenis_proses_perizinan }}</td>
+                    <td>{{ $izin->status }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</body>
+</html> --}}
