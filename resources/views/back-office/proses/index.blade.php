@@ -3,6 +3,7 @@
 @section('title', 'Proses Perizinan')
 
 @section('head')
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -187,16 +188,19 @@
                             <th>Catatan</th>
                             <th>Data Permohonan</th>
                             <th>Identitas Pemohon</th>
+                            <th>Status Verifikasi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($pendaftaran as $pendaftarans)
                             <tr>
-                                <td>
-                                    <a href="{{ route('proses-backoffice.detail', $pendaftarans->id) }}" class="btn btn-warning">Detail</a>
+                                <td class="align-top">
+                                    <a href="{{ route('proses-backoffice.detail', $pendaftarans->id) }}"
+                                        class="btn btn-warning">Detail</a>
                                 </td>
-                                <td>
-                                    <div class="status-badge {{ strtolower($pendaftarans->proses_terakhir) === 'ditolak' ? 'status-rejected' : 'status-pending' }}">
+                                <td class="align-baseline">
+                                    <div
+                                        class="status-badge {{ strtolower($pendaftarans->proses_terakhir) === 'ditolak' ? 'status-rejected' : 'status-pending' }}">
                                         {{ $pendaftarans->proses_terakhir }}
                                     </div>
                                     <div class="mt-2">
@@ -217,6 +221,12 @@
                                     </div>
                                 </td>
                                 <td>{{ $pendaftarans->nama_pemohon }}</td>
+                                <td>
+                                    <div id="status-frontoffice-{{ $pendaftarans->pengajuan_id }}"></div>
+                                    <div id="status-kasi-{{ $pendaftarans->pengajuan_id }}"></div>
+                                    <div id="status-backoffice-{{ $pendaftarans->pengajuan_id }}"></div>
+                                    <div id="status-final-{{ $pendaftarans->pengajuan_id }}"></div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -224,4 +234,50 @@
             </div>
         </div>
     </div>
+
+
+
+@section('script')
+    <script>
+        const pengajuanIds = @json($pendaftaran->pluck('pengajuan_id'));
+
+        pengajuanIds.forEach(pengajuanId => {
+            fetch(`/api/verification-status/${pengajuanId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const badgeClass = (status) => {
+                        if (status === 'verified') return 'badge badge-warning';
+                        if (status === 'rejected') return 'badge badge-danger';
+                        return 'badge badge-info';
+                    };
+
+                    document.getElementById(`status-frontoffice-${pengajuanId}`).innerHTML =
+                        `<span class="${badgeClass(data.frontoffice)}">Front Office: ${data.frontoffice === 'verified' ? 'Terverifikasi' : data.frontoffice}</span>`;
+
+                    document.getElementById(`status-kasi-${pengajuanId}`).innerHTML =
+                        `<span class="${badgeClass(data.kasi)}">Kasi: ${data.kasi === 'verified' ? 'Terverifikasi' : data.kasi}</span>`;
+
+                    document.getElementById(`status-backoffice-${pengajuanId}`).innerHTML =
+                        `<span class="${badgeClass(data.backoffice)}">Back Office: ${data.backoffice === 'verified' ? 'Terverifikasi' : data.backoffice}</span>`;
+
+                    // Smart status logic
+                    let statusFinal = '';
+                    if (data.frontoffice !== 'verified') {
+                        statusFinal = 'Menunggu Verifikasi Front Office';
+                    } else if (data.kasi !== 'verified') {
+                        statusFinal = 'Menunggu Verifikasi Kasi';
+                    } else if (data.backoffice !== 'verified') {
+                        statusFinal = 'Menunggu Verifikasi Back Office';
+                    } else {
+                        statusFinal = 'Siap Cetak Izin';
+                    }
+
+                    document.getElementById(`status-final-${pengajuanId}`).innerHTML =
+                        `<span class="badge badge-primary">Status: ${statusFinal}</span>`;
+                });
+        });
+    </script>
+@endsection
+
+
 @endsection

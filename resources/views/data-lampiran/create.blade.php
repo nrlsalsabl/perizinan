@@ -556,5 +556,6 @@
             previewFrame.src = '';
             previewContainer.classList.remove('active');
         }
+
     </script>
 @endsection

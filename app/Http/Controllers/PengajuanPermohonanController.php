@@ -31,23 +31,26 @@ class PengajuanPermohonanController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    $pengajuan = pengajuanPermohonan::where([
+        ['dinas_badan', $request->dinas_badan],
+        ['jenis_izin', $request->jenis_izin],
+        ['jenis_permohonan', $request->jenis_permohonan],
+    ])->first();
 
-
-        // Simpan data pengajuan ke database
+    if (!$pengajuan) {
         $pengajuan = pengajuanPermohonan::create([
             'dinas_badan' => $request->dinas_badan,
             'jenis_izin' => $request->jenis_izin,
             'jenis_permohonan' => $request->jenis_permohonan,
         ]);
-
-        // Simpan pengajuan_id ke session
-        $request->session()->put('pengajuan_id', $pengajuan->id);
-
-        // pengajuanPermohonan::create($request->all());
-
-        return redirect()->route('data-pemohon.show')->with('success', 'Data perizinan created successfully.');
     }
+
+    $request->session()->put('pengajuan_id', $pengajuan->id);
+
+    return redirect()->route('data-pemohon.show')->with('success', 'Data perizinan created successfully.');
+}
+
 
     public function get_jenisizin(Request $request)
     {

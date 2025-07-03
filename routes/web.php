@@ -28,6 +28,7 @@ use App\Http\Middleware\JabatanMiddleware;
 use App\Http\Controllers\kasiController;
 use App\Http\Controllers\backofficeController;
 use App\Http\Controllers\LaporanExportController;
+use App\Http\Controllers\VerificationStatusController;
 
 // Home Route
 Route::get('/', function () {
@@ -103,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/penyerahan-izin', [backofficeController::class, 'indexPenyerahan'])->name('penyerahan-izin.index');
         Route::get('/penyerahan-izin/{id}/detail', [backofficeController::class, 'detailPenyerahan'])->name('penyerahan-izin.detail');
         Route::post('/penyerahan-izin/{id}', [backofficeController::class, 'updatePenyerahan'])->name('penyerahan-izin.update');
+        Route::get('/api/verification-status/{id}', [backofficeController::class, 'getVerificationStatus']);
+
     });
 
     // Kasi routes
@@ -110,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/verifikasi-kasi', [kasiController::class, 'indexVerifikasi'])->name('verifikasi-kasi.index');
         Route::get('/verifikasi-kasi/{id}/detail', [kasiController::class, 'detailVerifikasi'])->name('verifikasi-kasi.detail');
         Route::post('/verifikasi-kasi/{id}', [kasiController::class, 'updateVerifikasi'])->name('verifikasi-kasi.update');
+        Route::get('/api/verification-status-kasi/{pengajuanId}', [kasiController::class, 'getVerificationStatus'])->name('api.kasi.verification-status');
     });
 
     Route::post('/save-code', [AuthController::class, 'saveCode'])->name('save.code');
@@ -172,7 +176,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pengaturan/task/{id}', [PengaturanController::class, 'updateTask'])->name('task.update');
     Route::delete('/pengaturan/task/{id}', [PengaturanController::class, 'destroyTask'])->name('task.destroy');
 
-
     Route::get('/pengaturan/template-izin', [PengaturanController::class, 'templateIzin'])->name('template-izin.index');
     Route::get('/pengaturan/template-izin/{id}', [PengaturanController::class, 'getTemplatesByIzin']);
 
@@ -191,8 +194,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/template-resi', [TemplateResiController::class, 'store'])->name('template-resi.store');
     Route::delete('/template-resi/{id}', [TemplateResiController::class, 'destroy'])->name('template-resi.destroy');
 
-    // Route::resource('setting-portal', PengaturanController::class);
-
     Route::prefix('master-data')->group(function () {
         Route::get('provinsi', [MasterDataController::class, 'provinsi'])->name('provinsi.index');
         Route::get('kabupaten-kota', [MasterDataController::class, 'kabupatenKota'])->name('kabupaten-kota.index');
@@ -204,7 +205,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('tabel-referensi', [MasterDataController::class, 'tabelReferensi'])->name('tabel-referensi.index');
     });
 
-    // Route::resource('provinsi', MasterDataController::class);
     Route::get('/master-data/provinsi', [MasterDataController::class, 'provinsi'])->name('provinsi.index');
     Route::get('/master-data/provinsi/create', [MasterDataController::class, 'createProvinsi'])->name('provinsi.create');
     Route::post('/master-data/provinsi', [MasterDataController::class, 'storeProvinsi'])->name('provinsi.store');
@@ -245,7 +245,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/data-perusahaan/get_bentukperusahaan', [DataPerusahaanController::class, 'get_bentukperusahaan'])->name('data-perusahaan.get_bentukperusahaan');
     Route::get('/data-perusahaan/get_statusperusahaan', [DataPerusahaanController::class, 'get_statusperusahaan'])->name('data-perusahaan.get_statusperusahaan');
 
-
     Route::get('/lokasi-izin/create', [LokasiIzinController::class, 'create'])->name('lokasi-izin.create');
     Route::post('/lokasi-izin', [LokasiIzinController::class, 'store'])->name('lokasi-izin.store');
     Route::get('/lokasi-izin/show', [LokasiIzinController::class, 'show'])->name('lokasi-izin.show');
@@ -254,8 +253,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/data-lampiran/create', [DataDetailController::class, 'create'])->name('data-lampiran.create');
     Route::post('/data-lampiran', [DataDetailController::class, 'store'])->name('data-lampiran.store');
     Route::get('/data-lampiran/show', [DataDetailController::class, 'show'])->name('data-lampiran.show');
-    // Route::get('/pengajuan-permohonan/get_jenisizin', [PengajuanPermohonanController::class, 'get_jenisizin'])->name('pengajuan-permohonan.get_jenisizin');
-
+    Route::get('/data-lampiran/detail/{id}', [DataDetailController::class, 'detail'])->name('data-lampiran.detail');
+    // Route::get('/pengajuan-permohonan/get_jenisizin', [PengajuanPermohonanController::class, 'get_jenisizin'])->name('pengajuan-permohonan.get_jenisizin');  
 
     Route::get('data-hari-libur/create', [MasterDataController::class, 'createHariLibur'])->name('data-hari-libur.create');
     Route::post('data-hari-libur', [MasterDataController::class, 'storeHariLibur'])->name('data-hari-libur.store');
@@ -371,5 +370,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/daftar-perizinan/manage/{id}', [\App\Http\Controllers\PengaturanController::class, 'manageDaftarPerizinan'])->name('daftar-perizinan.manage');
 
     Route::get('/api/verification-status/{pengajuanId}', [frontofficeController::class, 'getVerificationStatus'])->name('api.verification-status');
+    Route::get('/api/verification-status/{pengajuanId}', [VerificationStatusController::class, 'getStatus']);
     Route::get('/api/dashboard-stats', [frontofficeController::class, 'getDashboardStats'])->name('api.dashboard-stats');
 })->middleware(JabatanMiddleware::class);

@@ -32,6 +32,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 450px;
+            overflow-x: hidden;
             transition: all 0.3s ease;
         }
         

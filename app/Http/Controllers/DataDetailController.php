@@ -34,86 +34,71 @@ class DataDetailController extends Controller
         return view('data-lampiran.create');
     }
 
-    public function store(Request $request)
-    {
-        if (!$request->session()->has('lokasi_id') || !$request->session()->has('pengajuan_id')) {
-            return redirect()->route('lokasi-izin.create')->with('error', 'Lengkapi data lokasi dan pengajuan terlebih dahulu.');
-        }
-        $request->validate([
-            'tgl_permohonan' => 'required|date',
-            'nomor_surat' => 'required|string',
-            'nama' => 'required|string',
-            'jenis_usaha' => 'required|string',
-            'surat_permohonan' => 'required|file|mimes:pdf',
-            'ktp_dir' => 'required|file|mimes:pdf',
-            'nib_oss' => 'required|file|mimes:pdf',
-            'izin_usaha' => 'required|file|mimes:pdf',
-            'akta_per' => 'required|file|mimes:pdf',
-            'profil_per' => 'required|file|mimes:pdf',
-            'npwp_kaltim' => 'required|file|mimes:pdf',
-            'surat_domisili' => 'required|file|mimes:pdf',
-            'sertif_badan' => 'required|file|mimes:pdf',
-            'rencana_peng' => 'required|file|mimes:pdf',
-            'surat_pene' => 'required|file|mimes:pdf',
-            'sertif_kompeten' => 'required|file|mimes:pdf',
-            'sertif_iso' => 'required|file|mimes:pdf',
-            'sop' => 'required|file|mimes:pdf',
-            'peralatan_sewa' => 'required|file|mimes:pdf',
-            'surat_kuasa' => 'required|file|mimes:pdf',
-        ]);
+   public function store(Request $request)
+{
+    // Cek apakah session lokasi dan pengajuan tersedia
+    if (!$request->session()->has('lokasi_id') || !$request->session()->has('pengajuan_id')) {
+        return redirect()->route('lokasi-izin.create')->with('error', 'Lengkapi data lokasi dan pengajuan terlebih dahulu.');
+    }
 
-        $lokasiId = $request->session()->get('lokasi_id');
-        $pengajuanId = $request->session()->get('pengajuan_id');
+    // Validasi input dan file
+    $request->validate([
+        'tgl_permohonan' => 'required|date',
+        'nomor_surat' => 'required|string',
+        'nama' => 'required|string',
+        'jenis_usaha' => 'required|string',
+        'surat_permohonan' => 'required|file|mimes:pdf',
+        'ktp_dir' => 'required|file|mimes:pdf',
+        'nib_oss' => 'required|file|mimes:pdf',
+        'izin_usaha' => 'required|file|mimes:pdf',
+        'akta_per' => 'required|file|mimes:pdf',
+        'profil_per' => 'required|file|mimes:pdf',
+        'npwp_kaltim' => 'required|file|mimes:pdf',
+        'surat_domisili' => 'required|file|mimes:pdf',
+        'sertif_badan' => 'required|file|mimes:pdf',
+        'rencana_peng' => 'required|file|mimes:pdf',
+        'surat_pene' => 'required|file|mimes:pdf',
+        'sertif_kompeten' => 'required|file|mimes:pdf',
+        'sertif_iso' => 'required|file|mimes:pdf',
+        'sop' => 'required|file|mimes:pdf',
+        'peralatan_sewa' => 'required|file|mimes:pdf',
+        'surat_kuasa' => 'required|file|mimes:pdf',
+    ]);
 
-        $path1 = $request->file('surat_permohonan') ?  $request->file('surat_permohonan')->store('', 'public') : null;
-        $path2 = $request->file('ktp_dir') ?  $request->file('ktp_dir')->store('', 'public') : null;
-        $path3 = $request->file('nib_oss') ? $request->file('nib_oss')->store('', 'public') : null;
-        $path4 =  $request->file('izin_usaha') ? $request->file('izin_usaha')->store('', 'public') : null;
-        $path5 =  $request->file('akta_per') ? $request->file('akta_per')->store('', 'public') : null;
-        $path6 =  $request->file('profil_per') ? $request->file('profil_per')->store('', 'public') : null;
-        $path7 =  $request->file('npwp_kaltim') ? $request->file('npwp_kaltim')->store('', 'public') : null;
-        $path8 =  $request->file('surat_domisili') ? $request->file('surat_domisili')->store('', 'public') : null;
-        $path9 =  $request->file('sertif_badan') ? $request->file('sertif_badan')->store('', 'public') : null;
-        $path10 =  $request->file('rencana_peng') ? $request->file('rencana_peng')->store('', 'public') : null;
-        $path11 =  $request->file('surat_pene') ? $request->file('surat_pene')->store('', 'public') : null;
-        $path12 =  $request->file('sertif_kompeten') ? $request->file('sertif_kompeten')->store('', 'public') : null;
-        $path13 =  $request->file('sertif_iso') ? $request->file('sertif_iso')->store('', 'public') : null;
-        $path14 =  $request->file('sop') ? $request->file('sop')->store('', 'public') : null;
-        $path15 =  $request->file('peralatan_sewa') ? $request->file('peralatan_sewa')->store('', 'public') : null;
-        $path16 =  $request->file('surat_kuasa') ? $request->file('surat_kuasa')->store('', 'public') : null;
+    // Ambil dari session
+    $lokasiId = $request->session()->get('lokasi_id');
+    $pengajuanId = $request->session()->get('pengajuan_id');
 
-        $lampiran = dataDetail::create([
-            'lokasi_id' => $lokasiId,
-            'tgl_permohonan' => $request->tgl_permohonan,
-            'nomor_surat' => $request->nomor_surat,
-            'nama' => $request->nama,
-            'jenis_usaha' => $request->jenis_usaha,
-            'surat_permohonan' => $path1 ?? 'no file',
-            'ktp_dir' => $path2 ?? 'no file',
-            'nib_oss' => $path3 ?? 'no file',
-            'izin_usaha' => $path4 ?? 'no file',
-            'akta_per' => $path5 ?? 'no file',
-            'profil_per' => $path6 ?? 'no file',
-            'npwp_kaltim' => $path7 ?? 'no file',
-            'surat_domisili' => $path8 ?? 'no file',
-            'sertif_badan' => $path9 ?? 'no file',
-            'rencana_peng' => $path10 ?? 'no file',
-            'surat_pene' => $path11 ?? 'no file',
-            'sertif_kompeten' => $path12 ?? 'no file',
-            'sertif_iso' => $path13 ?? 'no file',
-            'sop' => $path14 ?? 'no file',
-            'peralatan_sewa' => $path15 ?? 'no file',
-            'surat_kuasa' => $path16 ?? 'no file',
-        ]);
+    // Upload semua file
+    $uploaded = [];
+    foreach ([
+        'surat_permohonan', 'ktp_dir', 'nib_oss', 'izin_usaha',
+        'akta_per', 'profil_per', 'npwp_kaltim', 'surat_domisili',
+        'sertif_badan', 'rencana_peng', 'surat_pene', 'sertif_kompeten',
+        'sertif_iso', 'sop', 'peralatan_sewa', 'surat_kuasa'
+    ] as $field) {
+        $uploaded[$field] = $request->file($field)->store('', 'public');
+    }
 
-        // Get related data for creating verification request
-        $pemohon = dataPemohon::where('pengajuan_id', $pengajuanId)->first();
-        $perusahaan = dataPerusahaan::where('pemohon_id', $pemohon->id)->first();
-        $pengajuan = pengajuanPermohonan::find($pengajuanId);
+    // Simpan data detail lampiran
+    $lampiran = dataDetail::create(array_merge([
+        'lokasi_id' => $lokasiId,
+        'tgl_permohonan' => $request->tgl_permohonan,
+        'nomor_surat' => $request->nomor_surat,
+        'nama' => $request->nama,
+        'jenis_usaha' => $request->jenis_usaha,
+    ], $uploaded));
 
-        // Create verification request for Front Office
+    // Dapatkan info pemohon dan pengajuan
+    $pemohon = dataPemohon::where('pengajuan_id', $pengajuanId)->first();
+    $pengajuan = pengajuanPermohonan::find($pengajuanId);
+
+    // Cek apakah sudah ada requestPendaftaran sebelumnya
+    $existing = requestPendaftaran::where('pengajuan_id', $pengajuanId)->first();
+
+    if (!$existing) {
         requestPendaftaran::create([
-            'resi' => 'RESI-' . strtoupper(Str::random(8)),
+            'resi' => strtoupper(Str::random(8)), // ✅ Format resmi & konsisten
             'nama_pemohon' => $pemohon->name,
             'pengajuan_id' => $pengajuanId,
             'user_id' => Auth::id(),
@@ -123,25 +108,22 @@ class DataDetailController extends Controller
             'role' => 'Front Office',
             'verification_status' => 'pending'
         ]);
-
-        $request->session()->flush();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil disimpan',
-            'redirect' => route('dashboard')
-        ]);
     }
+
+    // Bersihkan session agar tidak reuse
+    $request->session()->forget(['pengajuan_id', 'lokasi_id']);
+
+    // Redirect ke detail
+    return redirect()->route('data-lampiran.detail', $lampiran->id)
+        ->with('success', '✅ Data berhasil disimpan.');
+}
+
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request)
     {
-        // $step1Data = $request->session()->get('storePengajuan');
-        // $step2Data = $request->session()->get('storePemohon');
-        // $step3Data = $request->session()->get('storePerusahaan');
-        // $step4Data = $request->session()->get('storeLokasi');
 
         return view('data-lampiran.create');
     }
@@ -169,4 +151,13 @@ class DataDetailController extends Controller
     {
         //
     }
+
+  public function detail($id)
+{
+    $lampiran = dataDetail::findOrFail($id);
+    return view('data-lampiran.detail', compact('lampiran'));
+}
+
+
+
 }

@@ -192,10 +192,10 @@
                     <tbody>
                         @foreach ($pendaftaran as $pendaftarans)
                             <tr>
-                                <td>
+                                <td class="align-baseline">
                                     <a href="{{ route('penyerahan-izin.detail', $pendaftarans->id) }}" class="btn btn-warning">Detail</a>
                                 </td>
-                                <td>
+                                <td class="align-baseline">
                                     <div class="status-badge {{ strtolower($pendaftarans->proses_terakhir) === 'ditolak' ? 'status-rejected' : 'status-pending' }}">
                                         {{ $pendaftarans->proses_terakhir }}
                                     </div>

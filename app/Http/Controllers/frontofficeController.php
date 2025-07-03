@@ -48,57 +48,66 @@ class frontofficeController extends Controller
         return view('front-office.verifikasi-pendaftaran.detail', compact('pendaftaran', 'pemohon', 'perusahaan', 'lokasi', 'lampiran'));
     }
 
-    public function updatePendaftaran(Request $request, $id)
-    {
-        $request->validate([
-            'proses_terakhir' => 'required|in:Proses Paralel,Ditolak',
-            'alasan_penolakan' => 'required_if:proses_terakhir,Ditolak',
-            'resi' => 'required',
-            'name' => 'required',
-            'jenis_izin' => 'required',
-            'jenis_permohonan' => 'required'
+public function updatePendaftaran(Request $request, $id)
+{
+    $request->validate([
+        'proses_terakhir' => 'required|in:Proses Kasi,Ditolak',
+        'alasan_penolakan' => 'required_if:proses_terakhir,Ditolak',
+        'resi' => 'required',
+        'name' => 'required',
+        'jenis_izin' => 'required',
+        'jenis_permohonan' => 'required'
+    ]);
+
+    $pendaftaran = requestPendaftaran::findOrFail($id);
+    $pemohon = dataPemohon::where('pengajuan_id', $pendaftaran->pengajuan_id)->firstOrFail();
+    $userId = Auth::id();
+
+    if ($request->input('proses_terakhir') === 'Proses Kasi') {
+        // Front Office menverifikasi, lanjut ke Kasi
+        $pendaftaran->update([
+            'verification_status' => 'verified',
+            'proses_terakhir' => 'Terverifikasi',
+            'verified_by' => $userId,
+            'verified_at' => now()
         ]);
 
-        $pendaftaran = requestPendaftaran::findOrFail($id);
-        $pemohon = dataPemohon::where('pengajuan_id', $pendaftaran->pengajuan_id)->firstOrFail();
-        $perusahaan = dataPerusahaan::where('pemohon_id', $pemohon->id)->firstOrFail();
-        $lokasi = lokasiIzin::where('perusahaan_id', $perusahaan->id)->firstOrFail();
-        $lampiran = dataDetail::where('lokasi_id', $lokasi->id)->firstOrFail();
-        $userId = Auth::id();
-
-        if ($request->input('proses_terakhir') === 'Proses Paralel') {
-            $pendaftaran->update([
-                'resi' => $request->input('resi'),   
-                'nama_pemohon' => $request->input('name'),
-                'jenis_izin' => $request->input('jenis_izin'),
-                'jenis_permohonan' => $request->input('jenis_permohonan'),
-                'proses_terakhir' => $request->input('proses_terakhir'),
-                'role' => 'Front Office',
-                'verification_status' => 'verified',
-                'catatan' => $request->input('alasan_penolakan', ''),
-                'verified_at' => now(),
-                'verified_by' => Auth::id()
-            ]);
-        } else {
-            requestPendaftaran::create([
-                'resi' => $request->input('resi'),   
-                'nama_pemohon' => $request->input('name'),
-                'pengajuan_id' => $pemohon->pengajuan_id,
-                'user_id' => $userId,
-                'jenis_izin' => $request->input('jenis_izin'),
-                'jenis_permohonan' => $request->input('jenis_permohonan'),
-                'proses_terakhir' => $request->input('proses_terakhir'),
-                'role' => 'Front Office',
-                'verification_status' => 'rejected',
-                'catatan' => $request->input('alasan_penolakan', ''),
-                'verified_at' => now(),
-                'verified_by' => Auth::id()
-            ]);
-        }
-
-        return redirect()->route('verifikasi-pendaftaran.index')
-            ->with('success', 'Status pendaftaran berhasil diperbarui!');
+        requestPendaftaran::create([
+            'resi' => $request->input('resi'),
+            'nama_pemohon' => $request->input('name'),
+            'pengajuan_id' => $pemohon->pengajuan_id,
+            'user_id' => $userId,
+            'jenis_izin' => $request->input('jenis_izin'),
+            'jenis_permohonan' => $request->input('jenis_permohonan'),
+            'proses_terakhir' => 'Proses Kasi',
+            'role' => 'Kasi',
+            'verification_status' => 'pending',
+            'verified_at' => now(),
+            'verified_by' => $userId
+        ]);
+    } else {
+        // Front Office menolak
+        requestPendaftaran::create([
+            'resi' => $request->input('resi'),
+            'nama_pemohon' => $request->input('name'),
+            'pengajuan_id' => $pemohon->pengajuan_id,
+            'user_id' => $userId,
+            'jenis_izin' => $request->input('jenis_izin'),
+            'jenis_permohonan' => $request->input('jenis_permohonan'),
+            'proses_terakhir' => 'Ditolak',
+            'role' => 'Front Office',
+            'verification_status' => 'rejected',
+            'catatan' => $request->input('alasan_penolakan'),
+            'verified_at' => now(),
+            'verified_by' => $userId
+        ]);
     }
+
+    return redirect()->route('verifikasi-pendaftaran.index')
+        ->with('success', 'Status pendaftaran berhasil diperbarui!');
+}
+
+
 
     public function printSertifikat($id)
     {
@@ -203,4 +212,28 @@ class frontofficeController extends Controller
             return response('Error: ' . $e->getMessage(), 500);
         }
     }
+
+public function getStats()
+{
+    $jumlahPendaftaran = requestPendaftaran::where('proses_terakhir', 'Pendaftaran')->count();
+    $jumlahKasiVerif = requestPendaftaran::where('role', 'Kasi')
+        ->where('verification_status', 'verified')->count();
+    $jumlahBackVerif = requestPendaftaran::where('role', 'Back Office')
+        ->where('verification_status', 'verified')->count();
+    $jumlahCetak = requestPendaftaran::where('proses_terakhir', 'Cetak Izin')->count();
+    $jumlahDitolak = requestPendaftaran::where('proses_terakhir', 'Ditolak')->count();
+
+    return response()->json([
+        'total' => $jumlahPendaftaran + $jumlahKasiVerif + $jumlahBackVerif + $jumlahCetak + $jumlahDitolak,
+        'pendaftaran' => $jumlahPendaftaran,
+        'kasiVerif' => $jumlahKasiVerif,
+        'backVerif' => $jumlahBackVerif,
+        'cetak' => $jumlahCetak,
+        'ditolak' => $jumlahDitolak,
+        'selesai' => $jumlahCetak,
+        'dalamProses' => $jumlahPendaftaran + $jumlahKasiVerif + $jumlahBackVerif
+    ]);
+}
+
+
 }

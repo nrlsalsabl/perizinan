@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('head')
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,7 +198,7 @@
     <div class="container">
         <form action="{{ route('proses-backoffice.update', $pendaftaran->id) }}" method="POST">
             @csrf
-            
+
             <div class="card">
                 <div class="header">
                     <h1>Data Permohonan Izin</h1>
@@ -208,20 +209,23 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="resi">Resi</label>
-                                <input type="text" name="resi" class="form-control" id="resi" value="{{ $pendaftaran->resi }}" readonly>
+                                <input type="text" name="resi" class="form-control" id="resi"
+                                    value="{{ $pendaftaran->resi }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="jenis_izin">Jenis Izin</label>
-                                <input type="text" name="jenis_izin" class="form-control" id="jenis_izin" value="{{ $pendaftaran->jenis_izin }}" readonly>
+                                <input type="text" name="jenis_izin" class="form-control" id="jenis_izin"
+                                    value="{{ $pendaftaran->jenis_izin }}" readonly>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="jenis_permohonan">Jenis Layanan</label>
-                        <input type="text" name="jenis_permohonan" class="form-control" id="jenis_permohonan" value="{{ $pendaftaran->jenis_permohonan }}" readonly>
+                        <input type="text" name="jenis_permohonan" class="form-control" id="jenis_permohonan"
+                            value="{{ $pendaftaran->jenis_permohonan }}" readonly>
                     </div>
                 </div>
             </div>
@@ -234,37 +238,45 @@
                 <div class="p-4">
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" name="nik" class="form-control" id="nik" value="{{ $pemohon->nik }}" readonly>
+                        <input type="text" name="nik" class="form-control" id="nik" value="{{ $pemohon->nik }}"
+                            readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="name">Nama</label>
-                        <input type="text" name="name" class="form-control" id="name" value="{{ $pemohon->name }}" readonly>
+                        <input type="text" name="name" class="form-control" id="name"
+                            value="{{ $pemohon->name }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
-                        <input type="text" name="alamat" class="form-control" id="alamat" value="{{ $pemohon->alamat }}" readonly>
+                        <input type="text" name="alamat" class="form-control" id="alamat"
+                            value="{{ $pemohon->alamat }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="provinsi">Provinsi</label>
-                        <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $pemohon->provinsi }}" readonly>
+                        <input type="text" name="provinsi" class="form-control" id="provinsi"
+                            value="{{ $pemohon->provinsi }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="kabupaten_kota">Kabupaten/Kota</label>
-                        <input type="text" name="kabupaten_kota" class="form-control" id="kabupaten_kota" value="{{ $pemohon->kabupaten_kota }}" readonly>
+                        <input type="text" name="kabupaten_kota" class="form-control" id="kabupaten_kota"
+                            value="{{ $pemohon->kabupaten_kota }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="kecamatan">Kecamatan</label>
-                        <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $pemohon->kecamatan }}" readonly>
+                        <input type="text" name="kecamatan" class="form-control" id="kecamatan"
+                            value="{{ $pemohon->kecamatan }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="phone">No. Telp</label>
-                        <input type="text" name="phone" class="form-control" id="phone" value="{{ $pemohon->phone }}" readonly>
+                        <input type="text" name="phone" class="form-control" id="phone"
+                            value="{{ $pemohon->phone }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" name="email" class="form-control" id="email" value="{{ $pemohon->email }}" readonly>
+                        <input type="text" name="email" class="form-control" id="email"
+                            value="{{ $pemohon->email }}" readonly>
                     </div>
                 </div>
             </div>
@@ -277,46 +289,55 @@
                 <div class="p-4">
                     <div class="form-group">
                         <label for="nib">NIB</label>
-                        <input type="text" name="nib" class="form-control" id="nib" value="{{ $perusahaan->nib }}" readonly>
+                        <input type="text" name="nib" class="form-control" id="nib"
+                            value="{{ $perusahaan->nib }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="npwp">NPWP</label>
-                        <input type="text" name="npwp" class="form-control" id="npwp" value="{{ $perusahaan->npwp }}" readonly>
+                        <input type="text" name="npwp" class="form-control" id="npwp"
+                            value="{{ $perusahaan->npwp }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="nama_perusahaan">Nama Perusahaan</label>
-                        <input type="text" name="nama_perusahaan" class="form-control" id="nama_perusahaan" value="{{ $perusahaan->nama_perusahaan }}" readonly>
+                        <input type="text" name="nama_perusahaan" class="form-control" id="nama_perusahaan"
+                            value="{{ $perusahaan->nama_perusahaan }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
-                        <input type="text" name="alamat" class="form-control" id="alamat" value="{{ $perusahaan->alamat }}" readonly>
+                        <input type="text" name="alamat" class="form-control" id="alamat"
+                            value="{{ $perusahaan->alamat }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="provinsi">Provinsi</label>
-                        <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $perusahaan->provinsi }}" readonly>
+                        <input type="text" name="provinsi" class="form-control" id="provinsi"
+                            value="{{ $perusahaan->provinsi }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="kabupaten">Kabupaten</label>
-                        <input type="text" name="kabupaten" class="form-control" id="kabupaten" value="{{ $perusahaan->kabupaten }}" readonly>
+                        <input type="text" name="kabupaten" class="form-control" id="kabupaten"
+                            value="{{ $perusahaan->kabupaten }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="kecamatan">Kecamatan</label>
-                        <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $perusahaan->kecamatan }}" readonly>
+                        <input type="text" name="kecamatan" class="form-control" id="kecamatan"
+                            value="{{ $perusahaan->kecamatan }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="phone">No. Telp</label>
-                        <input type="text" name="phone" class="form-control" id="phone" value="{{ $perusahaan->phone }}" readonly>
+                        <input type="text" name="phone" class="form-control" id="phone"
+                            value="{{ $perusahaan->phone }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="bentuk_perusahaan">Bentuk Perusahaan</label>
-                        <input type="text" name="bentuk_perusahaan" class="form-control" id="bentuk_perusahaan" value="{{ $perusahaan->bentuk_perusahaan }}" readonly>
+                        <input type="text" name="bentuk_perusahaan" class="form-control" id="bentuk_perusahaan"
+                            value="{{ $perusahaan->bentuk_perusahaan }}" readonly>
                     </div>
                 </div>
             </div>
@@ -329,37 +350,44 @@
                 <div class="p-4">
                     <div class="form-group">
                         <label for="provinsi">Provinsi</label>
-                        <input type="text" name="provinsi" class="form-control" id="provinsi" value="{{ $lokasi->provinsi }}" readonly>
+                        <input type="text" name="provinsi" class="form-control" id="provinsi"
+                            value="{{ $lokasi->provinsi }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="kabupaten">Kabupaten</label>
-                        <input type="text" name="kabupaten" class="form-control" id="kabupaten" value="{{ $lokasi->kabupaten }}" readonly>
+                        <input type="text" name="kabupaten" class="form-control" id="kabupaten"
+                            value="{{ $lokasi->kabupaten }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="kecamatan">Kecamatan</label>
-                        <input type="text" name="kecamatan" class="form-control" id="kecamatan" value="{{ $lokasi->kecamatan }}" readonly>
+                        <input type="text" name="kecamatan" class="form-control" id="kecamatan"
+                            value="{{ $lokasi->kecamatan }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="jalan">Jalan</label>
-                        <input type="text" name="jalan" class="form-control" id="jalan" value="{{ $lokasi->jalan }}" readonly>
+                        <input type="text" name="jalan" class="form-control" id="jalan"
+                            value="{{ $lokasi->jalan }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="nomor">Nomor</label>
-                        <input type="text" name="nomor" class="form-control" id="nomor" value="{{ $lokasi->nomor }}" readonly>
+                        <input type="text" name="nomor" class="form-control" id="nomor"
+                            value="{{ $lokasi->nomor }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="rt">RT</label>
-                        <input type="text" name="rt" class="form-control" id="rt" value="{{ $lokasi->rt }}" readonly>
+                        <input type="text" name="rt" class="form-control" id="rt"
+                            value="{{ $lokasi->rt }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="rw">RW</label>
-                        <input type="text" name="rw" class="form-control" id="rw" value="{{ $lokasi->rw }}" readonly>
+                        <input type="text" name="rw" class="form-control" id="rw"
+                            value="{{ $lokasi->rw }}" readonly>
                     </div>
                 </div>
             </div>
@@ -372,13 +400,16 @@
                 <div class="p-4">
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Surat Permohonan ditandatangani direktur dan Bermaterai</label><br>
-                        <input type="hidden" name="nama_file[]" value="Scan Surat Permohonan ditandatangani direktur dan Bermaterai">
+                        <input type="hidden" name="nama_file[]"
+                            value="Scan Surat Permohonan ditandatangani direktur dan Bermaterai">
                         <select name="validasi[]" id="validasi" class="form-control">
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->surat_permohonan) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->surat_permohonan) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->surat_permohonan) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->surat_permohonan) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan KTP Direktur</label>
@@ -388,7 +419,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->ktp_dir) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->ktp_dir) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->ktp_dir) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan NIB OSS</label>
@@ -398,7 +430,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->nib_oss) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->nib_oss) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->nib_oss) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Izin Usaha</label>
@@ -408,7 +441,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->izin_usaha) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->izin_usaha) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->izin_usaha) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Akta Perusahaan</label>
@@ -418,7 +452,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->akta_per) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->akta_per) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->akta_per) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Profil Perusahaan</label>
@@ -428,7 +463,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->profil_per) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->profil_per) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->profil_per) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan NPWP Kaltim</label>
@@ -438,7 +474,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->npwp_kaltim) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->npwp_kaltim) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->npwp_kaltim) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Surat Keterangan Domisili</label>
@@ -447,8 +484,10 @@
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->surat_domisili) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->surat_domisili) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->surat_domisili) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->surat_domisili) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Sertifikat Badan USaha</label>
@@ -457,8 +496,10 @@
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->sertif_badan) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->sertif_badan) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->sertif_badan) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->sertif_badan) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Rencana Pengembangan Kantor Wilayah</label>
@@ -467,8 +508,10 @@
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->rencana_peng) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->rencana_peng) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->rencana_peng) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->rencana_peng) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Surat Penetapan Penanggung Jawab Teknik</label>
@@ -478,7 +521,8 @@
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->surat_pene) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->surat_pene) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->surat_pene) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Sertifikat Kompetensi Tenaga Teknik</label>
@@ -487,18 +531,23 @@
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->sertif_kompeten) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->sertif_kompeten) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->sertif_kompeten) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->sertif_kompeten) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
-                        <label for="kualifikasi">Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertfikat ISO</label>
-                        <input type="hidden" name="nama_file[]" value="Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertfikat ISO">
+                        <label for="kualifikasi">Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertfikat
+                            ISO</label>
+                        <input type="hidden" name="nama_file[]"
+                            value="Scan Dokumen Sistem Manajemen Mutu Sesuai SNI beserta sertfikat ISO">
                         <select name="validasi[]" id="validasi" class="form-control">
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->sertif_iso) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->sertif_iso) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->sertif_iso) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan SOP</label>
@@ -517,18 +566,22 @@
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
-                        <iframe src="{{ Storage::url($lampiran->peralatan_sewa) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->peralatan_sewa) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <iframe src="{{ Storage::url($lampiran->peralatan_sewa) }}" width="100%"
+                            height="150px"></iframe>
+                        <a href="{{ Storage::url($lampiran->peralatan_sewa) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                     <div class="col form-group">
                         <label for="kualifikasi">Scan Surat Kuasa Bermaterai Apabila Pengurusan Izin diwakilkan</label>
-                        <input type="hidden" name="nama_file[]" value="Scan Surat Kuasa Bermaterai Apabila Pengurusan Izin diwakilkan">
+                        <input type="hidden" name="nama_file[]"
+                            value="Scan Surat Kuasa Bermaterai Apabila Pengurusan Izin diwakilkan">
                         <select name="validasi[]" id="validasi" class="form-control">
                             <option value="valid" selected>Valid</option>
                             <option value="tidak valid">Tidak Valid</option>
                         </select>
                         <iframe src="{{ Storage::url($lampiran->surat_kuasa) }}" width="100%" height="150px"></iframe>
-                        <a href="{{ Storage::url($lampiran->surat_kuasa) }}" class="btn btn-primary" target="_blank">preview</a>
+                        <a href="{{ Storage::url($lampiran->surat_kuasa) }}" class="btn btn-primary"
+                            target="_blank">preview</a>
                     </div>
                 </div>
             </div>
@@ -541,7 +594,8 @@
                 <div class="p-4">
                     <div class="form-group">
                         <label for="catatan_umum">Catatan Umum</label>
-                        <input class="form-control" type="text" name="catatan_umum[]" id="catatan_umum" placeholder="Masukkan catatan umum...">
+                        <input class="form-control" type="text" name="catatan_umum[]" id="catatan_umum"
+                            placeholder="Masukkan catatan umum...">
                     </div>
 
                     <div class="form-group">
@@ -566,12 +620,22 @@
 
                     <div class="form-group" id="alasan_penolakan_group" style="display: none;">
                         <label for="alasan_penolakan">Alasan Penolakan</label>
-                        <textarea name="alasan_penolakan" id="alasan_penolakan" class="form-control" style="min-height: 100px;" placeholder="Masukkan alasan penolakan izin..."></textarea>
+                        <textarea name="alasan_penolakan" id="alasan_penolakan" class="form-control" style="min-height: 100px;"
+                            placeholder="Masukkan alasan penolakan izin..."></textarea>
                     </div>
 
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Simpan</button>
-                    </div>
+                    @if (!$sudahVerifikasi)
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Simpan</button>
+                        </div>
+                    @else
+                        <div class="text-center mt-4">
+                            <div class="alert alert-success font-weight-bold">
+                                Verifikasi telah dilakukan. Anda tidak dapat mengubah data ini lagi.
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </form>
@@ -604,7 +668,7 @@
         // Function to update verification status
         function updateVerificationStatus() {
             const pengajuanId = '{{ $pendaftaran->id }}';
-            
+
             fetch(`/api/verification-status/${pengajuanId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -613,7 +677,8 @@
                     const finalStatus = document.getElementById('final-status');
 
                     kasiStatus.textContent = data.kasi;
-                    kasiStatus.className = 'badge ' + (data.kasi === 'Terverifikasi' ? 'badge-success' : 'badge-warning');
+                    kasiStatus.className = 'badge ' + (data.kasi === 'Terverifikasi' ? 'badge-success' :
+                        'badge-warning');
 
                     // Update final status
                     if (data.kasi === 'Terverifikasi' && data.backoffice === 'Terverifikasi') {

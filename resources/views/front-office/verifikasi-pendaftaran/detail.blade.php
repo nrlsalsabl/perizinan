@@ -194,7 +194,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name">Nama</label>
-                                <input type="text" name="name" class="form-control" id="name" value="{{ $pemohon->name }}" readonly>
+                                <input type="hidden" name="name" class="form-control" id="name" value="{{ $pemohon->name }}">
                             </div>
                         </div>
                     </div>
@@ -602,7 +602,7 @@
                     <div class="form-group">
                         <label for="proses_terakhir" style="font-size: 1.1rem;">Hasil Verifikasi</label>
                         <select name="proses_terakhir" id="proses_terakhir" class="form-control" style="padding: 12px; font-size: 1rem; height: auto;">
-                            <option value="Proses Paralel" selected>Berkas Lengkap (dilanjutkan ke Kasi dan Back Office)</option>
+                            <option value="Proses Kasi">Berkas Lengkap (dilanjutkan ke Kasi)</option>
                             <option value="Ditolak">Berkas Tidak Lengkap (ditolak)</option>
                         </select>
                     </div>

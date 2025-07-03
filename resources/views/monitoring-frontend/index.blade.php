@@ -99,7 +99,7 @@
                             <td>
                                 <span class="status-badge 
                                     @if($rejects->proses_terakhir === 'Cetak Izin') bg-success text-white
-                                    @elseif($rejects->proses_terakhir === 'Ditolak') bg-danger text-white
+                                    @elseif($rejects->proses_terakhir === 'Ditolak') bg-danger
                                     @else bg-warning text-dark @endif">
                                     {{ $rejects->proses_terakhir }}
                                 </span>

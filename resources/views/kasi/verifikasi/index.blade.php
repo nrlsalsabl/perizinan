@@ -3,6 +3,7 @@
 @section('title', 'Verifikasi Kasi')
 
 @section('head')
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
-
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -53,10 +53,6 @@
                 margin-bottom: 2rem;
             }
 
-            .table {
-                margin-bottom: 0;
-            }
-
             .table thead th {
                 background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
                 color: white;
@@ -65,7 +61,6 @@
                 font-weight: 600;
                 font-size: 1rem;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
 
             .table tbody td {
@@ -85,16 +80,6 @@
                 padding: 0.6rem 1.2rem;
                 border-radius: 6px;
                 font-weight: 600;
-                transition: all 0.3s ease;
-                color: white;
-                text-transform: uppercase;
-                font-size: 0.9rem;
-                letter-spacing: 0.5px;
-            }
-
-            .btn-warning:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 color: white;
             }
 
@@ -123,49 +108,8 @@
                 color: white;
             }
 
-            .data-info {
-                background: #f8f9fa;
-                padding: 0.8rem;
-                border-radius: 6px;
-                margin-bottom: 0.5rem;
-            }
-
-            .data-info strong {
-                color: #2c3e50;
-                font-weight: 600;
-            }
-
             .text-muted {
                 color: #7f8c8d !important;
-            }
-
-            @media (max-width: 768px) {
-                .container {
-                    margin: 1rem auto;
-                }
-
-                .header {
-                    padding: 1.5rem;
-                }
-
-                .header h1 {
-                    font-size: 1.5rem;
-                }
-
-                .table thead th {
-                    padding: 1rem 0.5rem;
-                    font-size: 0.9rem;
-                }
-
-                .table tbody td {
-                    padding: 1rem 0.5rem;
-                    font-size: 0.9rem;
-                }
-
-                .status-badge {
-                    min-width: 100px;
-                    padding: 0.5rem 1rem;
-                }
             }
         </style>
     </head>
@@ -187,37 +131,37 @@
                             <th>Catatan</th>
                             <th>Data Permohonan</th>
                             <th>Identitas Pemohon</th>
+                            <th>Status Verifikasi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($pendaftaran as $pendaftarans)
+                        @php $pengajuanIds = $pendaftaran->pluck('pengajuan_id')->unique()->values(); @endphp
+                        @foreach ($pendaftaran as $item)
                             <tr>
-                                <td>
-                                    <a href="{{ route('verifikasi-kasi.detail', $pendaftarans->id) }}"
-                                        class="btn btn-warning">Detail</a>
-                                </td>
-                                <td>
-                                    <div class="status-badge {{ strtolower($pendaftarans->proses_terakhir) === 'ditolak' ? 'status-rejected' : 'status-pending' }}">
-                                        {{ $pendaftarans->proses_terakhir }}
-                                    </div>
+                                <td class="align-baseline"><a href="{{ route('verifikasi-kasi.detail', $item->id) }}"
+                                        class="btn btn-warning">Detail</a></td>
+                                <td class="align-baseline">
+                                    <div
+                                        class="status-badge {{ strtolower($item->proses_terakhir) === 'ditolak' ? 'status-rejected' : 'status-pending' }}">
+                                        {{ $item->proses_terakhir }}</div>
                                     <div class="mt-2">
-                                        <small class="text-muted">Oleh: {{ $pendaftarans->nama_pemohon }}</small><br>
-                                        <small class="text-muted">{{ $pendaftarans->created_at }}</small>
+                                        <small class="text-muted">Oleh: {{ $item->nama_pemohon }}</small><br>
+                                        <small class="text-muted">{{ $item->created_at }}</small>
                                     </div>
                                 </td>
-                                <td>{{ $pendaftarans->catatan }}</td>
+                                <td>{{ $item->catatan }}</td>
                                 <td>
-                                    <div class="data-info">
-                                        <strong>Resi:</strong> {{ $pendaftarans->resi }}
-                                    </div>
-                                    <div class="data-info">
-                                        <strong>Jenis Izin:</strong> {{ $pendaftarans->jenis_izin }}
-                                    </div>
-                                    <div class="data-info">
-                                        <strong>Jenis Layanan:</strong> {{ $pendaftarans->jenis_permohonan }}
-                                    </div>
+                                    <div><strong>Resi:</strong> {{ $item->resi }}</div>
+                                    <div><strong>Jenis Izin:</strong> {{ $item->jenis_izin }}</div>
+                                    <div><strong>Layanan:</strong> {{ $item->jenis_permohonan }}</div>
                                 </td>
-                                <td>{{ $pendaftarans->nama_pemohon }}</td>
+                                <td>{{ $item->nama_pemohon }}</td>
+                                <td>
+                                    <div id="status-frontoffice-{{ $item->pengajuan_id }}"></div>
+                                    <div id="status-kasi-{{ $item->pengajuan_id }}"></div>
+                                    <div id="status-backoffice-{{ $item->pengajuan_id }}"></div>
+                                    <div id="status-final-{{ $item->pengajuan_id }}"></div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -225,4 +169,45 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <script>
+        const pengajuanIds = @json($pengajuanIds);
+
+        pengajuanIds.forEach(pengajuanId => {
+            fetch(`/api/verification-status-kasi/${pengajuanId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`status-frontoffice-${pengajuanId}`).innerHTML =
+                        `<span class="badge ${data.frontoffice === 'Terverifikasi' ? 'badge-success' : (data.frontoffice === 'Ditolak' ? 'badge-danger' : 'badge-warning')}">Front Office: ${data.frontoffice}</span>`;
+                    document.getElementById(`status-kasi-${pengajuanId}`).innerHTML =
+                        `<span class="badge ${data.kasi === 'Terverifikasi' ? 'badge-success' : (data.kasi === 'Ditolak' ? 'badge-danger' : 'badge-warning')}">Kasi: ${data.kasi}</span>`;
+                    document.getElementById(`status-backoffice-${pengajuanId}`).innerHTML =
+                        `<span class="badge ${data.backoffice === 'Terverifikasi' ? 'badge-success' : (data.backoffice === 'Ditolak' ? 'badge-danger' : 'badge-warning')}">Back Office: ${data.backoffice}</span>`;
+
+                    const finalText = (
+                            data.frontoffice === 'Terverifikasi' &&
+                            data.kasi === 'Terverifikasi' &&
+                            (data.backoffice === 'Terverifikasi' || data.backoffice === 'Cetak Izin')
+                        ) ? 'Siap Cetak Izin' :
+                        (data.frontoffice === 'Ditolak' || data.kasi === 'Ditolak' || data.backoffice ===
+                            'Ditolak') ?
+                        'Permohonan Ditolak' :
+                        'Menunggu Semua Verifikasi';
+
+
+                    const finalClass = (finalText === 'Siap Cetak Izin') ?
+                        'badge-success' :
+                        (finalText === 'Permohonan Ditolak') ?
+                        'badge-danger' :
+                        'badge-info';
+
+                    document.getElementById(`status-final-${pengajuanId}`).innerHTML =
+                        `<span class="badge ${finalClass}">Status: ${finalText}</span>`;
+                });
+        });
+    </script>
+
 @endsection

@@ -569,9 +569,15 @@
                         <textarea name="alasan_penolakan" id="alasan_penolakan" class="form-control" style="min-height: 100px;" placeholder="Masukkan alasan penolakan izin..."></textarea>
                     </div>
 
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Simpan</button>
-                    </div>
+                    @if (!$sudahVerifikasi)
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            @else
+                <div class="alert alert-success text-center">
+                    Verifikasi sudah dilakukan. Data tidak dapat diubah kembali.
+                </div>
+            @endif
                 </div>
             </div>
         </form>
