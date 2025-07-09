@@ -129,6 +129,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="monitoringFrontOfficeDropdown">
                         <a class="dropdown-item" href="{{ route('monitoring.dashboard') }}"><i class="zmdi zmdi-view-dashboard"></i> <span class="menu-text">Monitoring Dashboard</span></a>
+                        <a class="dropdown-item" href="{{ route('monitoring.perizinanfo') }}"><i class="zmdi zmdi-view-dashboard"></i> <span class="menu-text">Monitoring Perizinan</span></a>
                     </div>
                 </li>
             @elseif (Auth::user()->jabatan === 'kasi')

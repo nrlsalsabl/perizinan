@@ -27,8 +27,30 @@ use App\Http\Controllers\frontendController;
 use App\Http\Middleware\JabatanMiddleware;
 use App\Http\Controllers\kasiController;
 use App\Http\Controllers\backofficeController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\LaporanExportController;
 use App\Http\Controllers\VerificationStatusController;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/tes-email', function () {
+    Mail::raw('Tes kirim dari Laravel ke email Gmail yang sama', function ($msg) {
+        $msg->to('kidosan122@gmail.com'); // Kirim ke diri sendiri
+        $msg->subject('Tes Gmail ke Gmail via Brevo');
+    });
+
+    return '✅ Email terkirim (cek inbox/spam)';
+});
+
+
+Route::get('/debug-email', function () {
+    \Illuminate\Support\Facades\Mail::raw('Tes SMTP Brevo', function ($m) {
+        $m->to('alamatgmailkamu@gmail.com')->subject('Tes Kirim dari Laravel Lokal via Brevo');
+    });
+
+    return 'Email test dikirim';
+});
+
 
 // Home Route
 Route::get('/', function () {
@@ -38,6 +60,12 @@ Route::get('/', function () {
 // Authentication Routes
 Route::post('/perizinan-online', [AuthController::class, 'login'])->name('login');
 Route::get('/perizinan-online', [AuthController::class, 'showLoginForm'])->name('perizinan-online');
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Register Route
 // Route::get('/register', function () {
@@ -54,10 +82,10 @@ Route::get('/master-data/kecamatan/get_kodekabupaten', [MasterDataController::cl
 // Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
 // Password Reset Routes
-Route::get('/password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
+// Route::get('/password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
+// Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+// Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
 Route::get('/persyaratan', [PageController::class, 'persyaratan'])->name('persyaratan');
 
 Route::middleware(['auth'])->group(function () {
@@ -330,6 +358,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('monitoring/dashboard-monitoring', [MonitoringController::class, 'monitoringDashboard'])->name('monitoring.dashboard');
     Route::get('monitoring/dashboard-monitoring/process', [MonitoringController::class, 'processDashboard'])->name('monitoring.dashboard.process');
+
+    Route::get('monitoring/dashboard-frontoffice', [MonitoringController::class, 'monitoringPerizinanFO'])->name('monitoring.perizinanfo');
     // Route::get('monitoring/rekapitulasi-izin/export/excel', [MonitoringController::class, 'exportToExcel'])->name('monitoring.rekapitulasi.export.excel');
     // Route::get('monitoring/rekapitulasi-izin/export/pdf', [MonitoringController::class, 'exportToPdf'])->name('monitoring.rekapitulasi.export.pdf');
     // Route::get('monitoring/rekapitulasi/process', [MonitoringController::class, 'rekapitulasiIzin'])->name('monitoring.rekapitulasi.process');

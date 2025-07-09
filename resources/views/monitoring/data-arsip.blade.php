@@ -124,8 +124,8 @@
                             <th>Alamat</th>
                             <th>Nama Perusahaan</th>
                             <th>Alamat Perusahaan</th>
-                            <th>Izin</th>
-                            <th>Arsip</th>
+                            {{-- <th>Izin</th>
+                            <th>Arsip</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -138,8 +138,8 @@
                                 <td>{{ $arsip->alamat }}</td>
                                 <td>{{ $arsip->nama_perusahaan }}</td>
                                 <td>{{ $arsip->alamat_perusahaan }}</td>
-                                <td>{{ $arsip->izin }}</td>
-                                <td>{{ $arsip->arsip }}</td>
+                                {{-- <td>{{ $arsip->izin }}</td>
+                                <td>{{ $arsip->arsip }}</td> --}}
                             </tr>
                         @endforeach
                     </tbody>

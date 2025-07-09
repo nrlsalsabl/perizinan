@@ -3,6 +3,7 @@
 @section('title', 'Laporan Rekapitulasi Izin')
 
 @section('head')
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,34 +20,40 @@
         <style>
             .card-filter {
                 border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 margin-bottom: 2rem;
             }
+
             .card-header {
-                background: linear-gradient(135deg, #1e5799 0%,#207cca 100%);
+                background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
                 color: white;
                 border-radius: 10px 10px 0 0 !important;
             }
+
             .table-responsive {
                 border-radius: 10px;
                 overflow: hidden;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
+
             .table thead {
-                background: linear-gradient(135deg, #1e5799 0%,#207cca 100%);
+                background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
                 color: white;
             }
+
             .btn-submit {
-                background: linear-gradient(135deg, #1e5799 0%,#207cca 100%);
+                background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
                 border: none;
                 padding: 10px 25px;
                 font-weight: 600;
                 letter-spacing: 0.5px;
             }
+
             .form-control {
                 border-radius: 5px;
                 padding: 10px 15px;
             }
+
             .select2-container--default .select2-selection--single {
                 height: 38px;
                 border-radius: 5px;
@@ -73,7 +80,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control" required>
+                                    <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control"
+                                        required>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +92,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control" required>
+                                    <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control"
+                                        required>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +102,8 @@
                                 <label for="jenis_izin" class="font-weight-bold">Jenis Izin</label>
                                 <select name="jenis_izin" id="jenis_izin" class="form-control select2">
                                     <option value="">-Semua-</option>
-                                    @foreach ($jenisIzins as $data)
-                                        <option value="{{ $data->nama_jenis_izin }}">{{ $data->nama_jenis_izin }}</option>
+                                    @foreach ($jenisIzins as $jenis)
+                                        <option value="{{ $jenis }}">{{ $jenis }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -134,7 +143,8 @@
             </div>
         @else
             <div class="alert alert-info mt-4">
-                <i class="fas fa-info-circle mr-2"></i>Tidak ada data izin yang ditemukan untuk rentang tanggal dan jenis izin yang dipilih.
+                <i class="fas fa-info-circle mr-2"></i>Tidak ada data izin yang ditemukan untuk rentang tanggal dan jenis
+                izin yang dipilih.
             </div>
         @endif
     </div>
