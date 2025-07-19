@@ -44,7 +44,7 @@
         100% { transform: scale(1); opacity: 0.7; }
     }
     .dropdown-item:hover {
-        background-color: #f5f5f5 !important;
+        /* background-color: #f5f5f5 !important; */
         transform: translateX(5px);
     }
     .nav-link:hover svg {

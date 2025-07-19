@@ -146,8 +146,10 @@ class LaporanController extends Controller
 
         $backOfficeStatus = requestPendaftaran::where('pengajuan_id', $detail->pengajuan_id)
             ->where('role', 'Back Office')
+            ->where('verification_status', 'verified')
             ->latest()
             ->first();
+        
 
         $data = [
             'id' => $detail->id,
